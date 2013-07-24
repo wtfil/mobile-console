@@ -1,0 +1,59 @@
+.mobile-console__holder
+{
+    background-color: #eee;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    font-family: consolas;
+    font-size: 12px;
+}
+.mobile-console__log
+{
+    color: black;
+    overflow: hidden;
+}
+.mobile-console__props
+{
+    padding-left: 10px;
+    display: none;
+    clear: both;
+}
+.mobile-console__props.visible
+{
+    display: block;
+}
+.mobile-console__node
+{
+    float: left;
+}
+.mobile-console__node.number
+{
+    color: #2d46d6;
+}
+.mobile-console__node.string
+{
+    color: #c83631;
+}
+.mobile-console__node.null
+{
+    color: #838080;
+}
+.mobile-console__node.inspect:before
+{
+    content: '▶';
+}
+.mobile-console__node.opened:before
+{
+    content: '▼';
+}
+
+.mobile-console__key
+{
+    float: left;
+    color: #8a3991;
+}

@@ -1,31 +1,28 @@
 (function () {
     var element;
 
-    function css(element, style) {
-
-        Object.keys(style).forEach(function (key) {
-            element.style[key] = style[key];
-        });
+    function createElement(cls, content, name) {
+        var elem = document.createElement(name || 'div');
+        if (content) {
+            elem.innerHTML = content;
+        }
+        elem.className = 'mobile-console__' + cls;
+        return elem;
     }
-    
+
     function scrollToBottom() {
         element.scrollTop = element.scrollHeight;
     }
 
     function Inspect(obj, key) {
-        var content = document.createElement('div'),
-            top = document.createElement('div'),
-            node = document.createElement('div'),
-            on = false,
+        var content = createElement('log'),
+            top = createElement('top'),
+            node = createElement('node'),
             elemsCreated = false,
-            keyNode, text, holder;
+            keyNode, text, props;
         
         if (key) {
-            keyNode = document.createElement('span');
-            keyNode.innerHTML = key + ':&nbsp;';
-            css(keyNode, {float: 'left', color: '#8a3991'});
-            css(node, {float: 'left'});
-            css(content, {overflow: 'hidden'});
+            keyNode = createElement('key', key + ':&nbsp;', 'span');
             top.appendChild(keyNode);
         }
 
@@ -33,70 +30,57 @@
         top.appendChild(node);
         if (typeof obj === 'number') {
             node.innerHTML = obj;
-            css(node, {color: '#2d46d6'});
+            node.classList.add('number');
         } else if (typeof obj === 'string') {
             node.innerHTML = '"' + obj + '"';   
-            css(node, {color: '#c83631'});
+            node.classList.add('string');
         } else if (obj === null) {
             node.innerHTML = 'null';   
-            css(node, {color: '#838080'});
+            node.classList.add('null');
+        } else if (obj === false || obj === true) {
+            node.innerHTML = '' + obj;
         } else if (obj instanceof Function) {
-            node.innerHTML = obj.toString();
+            node.innerHTML = obj.toString().split(/(\{)/).slice(0, 2).join('');
         } else {
 
             text = obj.constructor.name;
+            node.classList.add('inspect');
             if (Array.isArray(obj)) {
-                text += '[' + obj.length + ']';
+                text = '[' + obj.length + ']';
             }
-            node.innerHTML = '▸' + text;
-            holder = document.createElement('div');
-            css(holder, {
-                'padding-left': '10px',
-                'display': 'none',
-                'clear': 'both'
-            });
+
+            node.innerHTML = text;
+            props = createElement('props');
+
             node.addEventListener('click', function () {
-                if (!on) {
+                if (node.classList.contains('inspect')) {
                     if (!elemsCreated) {
                         Object.keys(obj).forEach(function (key) {
                             var elem = Inspect(obj[key], key);
-                            holder.appendChild(elem);
+                            props.appendChild(elem);
                         });
                         elemsCreated = true;
                     }
-                    node.innerHTML = '▾' + text;
-                    css(holder, {display: 'block'});
-                    on = true;
+                    node.classList.remove('inspect');
+                    node.classList.add('opened');
+                    props.classList.add('visible');
                 } else {
-                    node.innerHTML = '▸' + text;
-                    css(holder, {display: 'none'});
-                    on = false;
+                    node.classList.add('inspect');
+                    node.classList.remove('opened');
+                    props.classList.remove('visible');
                 }
             }, false);
 
-            content.appendChild(holder);
+            content.appendChild(props);
         }
 
         return content;
     }
 
     function createConsoleBlock() {
-        element = document.createElement('div');
-        css(element, { 
-            'background-color': '#eee',
-            position: 'fixed',
-            bottom: 0,
-            left: 0,
-            width: '100%',
-            padding: '10px',
-            'max-height': '200px',
-            'overflow-y': 'scroll',
-            '-webkit-overflow-scrolling': 'touch',
-            'font-size': '10px'
-        });
+        element = createElement('holder');
         document.body.appendChild(element);
     }
-
     window.addEventListener('load', function () {
         console.error = console.log = function (message) {
             if (!element) {
@@ -105,6 +89,6 @@
             element.appendChild(Inspect(message));
             scrollToBottom();
         };
+        console.log(window);
     }, false);
 }());
-
