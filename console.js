@@ -91,7 +91,6 @@
                 element.appendChild(Inspect(message));
                 scrollToBottom();
             };
-            console.log(window);
         }, false);
     }
 }());
