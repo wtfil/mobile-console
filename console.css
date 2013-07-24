@@ -43,17 +43,33 @@
 {
     color: #838080;
 }
+.mobile-console__node:before
+{
+    border-style: solid;
+    display: block;
+    float: left;
+    margin-right: 2px;
+    margin-top: 2px;
+    border-color: transparent;
+}
+
 .mobile-console__node.inspect:before
 {
-    content: '▶';
+    content: '';
+    border-width: 5px 0 5px 5px;
+    border-left-color: #838383;
 }
+
 .mobile-console__node.opened:before
 {
-    content: '▼';
+    content: '';
+    border-width: 5px 5px 0 5px;
+    border-top-color: #838383;
 }
 
 .mobile-console__key
 {
     float: left;
+    margin-right: 10px;
     color: #8a3991;
 }

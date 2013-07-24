@@ -22,7 +22,7 @@
             keyNode, text, props;
         
         if (key) {
-            keyNode = createElement('key', key + ':&nbsp;', 'span');
+            keyNode = createElement('key', key + ':', 'span');
             top.appendChild(keyNode);
         }
 
