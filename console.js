@@ -81,14 +81,17 @@
         element = createElement('holder');
         document.body.appendChild(element);
     }
-    window.addEventListener('load', function () {
-        console.error = console.log = function (message) {
-            if (!element) {
-                createConsoleBlock();
-            }
-            element.appendChild(Inspect(message));
-            scrollToBottom();
-        };
-        console.log(window);
-    }, false);
+
+    if(/android|webos|iphone|ipad|ipod|blackberry|window\sphone/i.test(navigator.userAgent)) {
+        window.addEventListener('load', function () {
+            console.error = console.log = function (message) {
+                if (!element) {
+                    createConsoleBlock();
+                }
+                element.appendChild(Inspect(message));
+                scrollToBottom();
+            };
+            console.log(window);
+        }, false);
+    }
 }());
