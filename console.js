@@ -14,10 +14,20 @@
         element.scrollTop = element.scrollHeight;
     }
 
-    function Inspect(obj, key) {
+    function escapeHTML(html) {
+        return String(html)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#x27;')
+            .replace(/\//g, '&#x2F;');
+    }
+
+    function inspect(obj, key) {
         var content = createElement('log'),
             top = createElement('top'),
-            node = createElement('node'),
+            node = createElement('node', '', 'span'),
             elemsCreated = false,
             keyNode, text, props;
         
@@ -32,10 +42,13 @@
             node.innerHTML = obj;
             node.classList.add('number');
         } else if (typeof obj === 'string') {
-            node.innerHTML = '"' + obj + '"';   
+            node.innerHTML = '"' + escapeHTML(obj) + '"';
             node.classList.add('string');
+        } else if (obj === undefined) {
+            node.innerHTML = 'undefined';
+            node.classList.add('null');
         } else if (obj === null) {
-            node.innerHTML = 'null';   
+            node.innerHTML = 'null';
             node.classList.add('null');
         } else if (obj === false || obj === true) {
             node.innerHTML = '' + obj;
@@ -58,10 +71,11 @@
 
             node.addEventListener('click', function () {
                 var elem, key;
+
                 if (node.classList.contains('inspect')) {
                     if (!elemsCreated) {
                         for (key in obj) {
-                            elem = Inspect(obj[key], key);
+                            elem = inspect(obj[key], key);
                             props.appendChild(elem);
                         }
                         elemsCreated = true;
@@ -93,7 +107,7 @@
                 if (!element) {
                     createConsoleBlock();
                 }
-                element.appendChild(Inspect(message));
+                element.appendChild(inspect(message));
                 scrollToBottom();
             };
         }, false);

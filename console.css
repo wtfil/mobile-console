@@ -10,7 +10,7 @@
     max-height: 200px;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
-    font-family: consolas;
+    font-family: monospace;
     font-size: 12px;
 }
 .mobile-console__log
@@ -30,7 +30,7 @@
 }
 .mobile-console__node
 {
-    float: left;
+    position: relative;
 }
 .mobile-console__node.number
 {
@@ -47,8 +47,8 @@
 .mobile-console__node:before
 {
     border-style: solid;
-    display: block;
-    float: left;
+    display: inline-block;
+    position: relative;
     margin-right: 4px;
     margin-top: 2px;
     border-color: transparent;
@@ -68,9 +68,13 @@
     border-top-color: #838383;
 }
 
+.mobile-console__top
+{
+    white-space: nowrap;
+}
+
 .mobile-console__key
 {
-    float: left;
     margin-right: 10px;
     color: #8a3991;
 }
