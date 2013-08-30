@@ -48,7 +48,7 @@
     border-style: solid;
     display: block;
     float: left;
-    margin-right: 2px;
+    margin-right: 4px;
     margin-top: 2px;
     border-color: transparent;
 }
@@ -56,14 +56,14 @@
 .mobile-console__node.inspect:before
 {
     content: '';
-    border-width: 5px 0 5px 5px;
+    border-width: 4px 0 4px 8px;
     border-left-color: #838383;
 }
 
 .mobile-console__node.opened:before
 {
     content: '';
-    border-width: 5px 5px 0 5px;
+    border-width: 8px 5px 0 5px;
     border-top-color: #838383;
 }
 

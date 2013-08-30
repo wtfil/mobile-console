@@ -6,7 +6,7 @@
         if (content) {
             elem.innerHTML = content;
         }
-        elem.className = 'mobile-console__' + cls;
+        elem.classList.add('mobile-console__' + cls);
         return elem;
     }
 
@@ -40,25 +40,30 @@
         } else if (obj === false || obj === true) {
             node.innerHTML = '' + obj;
         } else if (obj instanceof Function) {
-            node.innerHTML = obj.toString().split(/(\{)/).slice(0, 2).join('');
+            text = obj.toString();
+            if (text.indexOf('[native code]') !== -1) {
+                node.innerHTML = text;
+            } else {
+                node.innerHTML = text.split(/(\{)/).slice(0, 2).join('');
+            }
         } else {
 
-            text = obj.constructor.name;
+            node.innerHTML = obj.constructor.name;
             node.classList.add('inspect');
             if (Array.isArray(obj)) {
-                text = '[' + obj.length + ']';
+                node.innerHTML = '[' + obj.length + ']';
             }
 
-            node.innerHTML = text;
             props = createElement('props');
 
             node.addEventListener('click', function () {
+                var elem, key;
                 if (node.classList.contains('inspect')) {
                     if (!elemsCreated) {
-                        Object.keys(obj).forEach(function (key) {
-                            var elem = Inspect(obj[key], key);
+                        for (key in obj) {
+                            elem = Inspect(obj[key], key);
                             props.appendChild(elem);
-                        });
+                        }
                         elemsCreated = true;
                     }
                     node.classList.remove('inspect');
