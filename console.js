@@ -1,5 +1,6 @@
 (function () {
-    var element;
+    var CSS_PATH = 'https://rawgithub.com/wtfil/mobile-console/master/console.css',
+        element;
 
     function createElement(cls, content, name) {
         var elem = document.createElement(name || 'div');
@@ -101,8 +102,18 @@
         document.body.appendChild(element);
     }
 
+    function addStyles() {
+        style = document.createElement('link');
+        style.setAttribute('rel', 'stylesheet');
+        style.setAttribute('type', 'text/css');
+        style.setAttribute('href', CSS_PATH);
+        document.querySelector('head').appendChild(style);
+    }
+
+
     if(/android|webos|iphone|ipad|ipod|blackberry|window\sphone/i.test(navigator.userAgent)) {
         window.addEventListener('load', function () {
+            addStyles();
             console.error = console.log = function (message) {
                 if (!element) {
                     createConsoleBlock();
