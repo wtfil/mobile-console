@@ -133,7 +133,7 @@
 
     if(/android|webos|iphone|ipad|ipod|blackberry|window\sphone/i.test(navigator.userAgent)) {
         window.addEventListener('load', function () {
-            /*addStyles();*/
+            addStyles();
             console.error = console.log = function (message) {
                 if (!element) {
                     createConsoleBlock();
