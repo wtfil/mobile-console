@@ -25,15 +25,19 @@
             .replace(/\//g, '&#x2F;');
     }
 
-    function inspect(obj, key) {
+    function inspect(obj, key, enumerable) {
         var content = createElement('log'),
             top = createElement('top'),
             node = createElement('node', '', 'span'),
             elemsCreated = false,
             keyNode, text, props;
         
+        if (arguments.length === 2) {
+            enumerable = true;
+        }
+
         if (key) {
-            keyNode = createElement('key', key + ':', 'span');
+            keyNode = createElement(enumerable ? 'enumerable-key' : 'not-enumerable-key', key + ':', 'span');
             top.appendChild(keyNode);
         }
 
@@ -63,30 +67,46 @@
         } else {
 
             node.innerHTML = obj.constructor.name;
-            node.classList.add('inspect');
+            content.classList.add('inspect');
             if (Array.isArray(obj)) {
                 node.innerHTML = '[' + obj.length + ']';
             }
 
             props = createElement('props');
 
-            node.addEventListener('click', function () {
-                var elem, key;
+            top.addEventListener('click', function () {
+                var keys = [],
+                    basicKeys, elem, key;
 
-                if (node.classList.contains('inspect')) {
+                if (content.classList.contains('inspect')) {
                     if (!elemsCreated) {
+
                         for (key in obj) {
-                            elem = inspect(obj[key], key);
-                            props.appendChild(elem);
+                            keys.push(key);
                         }
+
+                        Object.getOwnPropertyNames(obj)
+                            .concat(keys)
+                            .filter(function (key, index, arr) {
+                                return arr.indexOf(key) === index;
+                            })
+                            .sort()
+                            .concat('__proto__')
+                            .forEach(function (key) {
+                                var enumerable = Object.getOwnPropertyDescriptor(obj, key);
+                                enumerable = enumerable ? enumerable.enumerable : false;
+
+                                elem = inspect(obj[key], key, enumerable);
+                                props.appendChild(elem);
+                            });
                         elemsCreated = true;
                     }
-                    node.classList.remove('inspect');
-                    node.classList.add('opened');
+                    content.classList.remove('inspect');
+                    content.classList.add('opened');
                     props.classList.add('visible');
                 } else {
-                    node.classList.add('inspect');
-                    node.classList.remove('opened');
+                    content.classList.add('inspect');
+                    content.classList.remove('opened');
                     props.classList.remove('visible');
                 }
             }, false);
@@ -113,7 +133,7 @@
 
     if(/android|webos|iphone|ipad|ipod|blackberry|window\sphone/i.test(navigator.userAgent)) {
         window.addEventListener('load', function () {
-            addStyles();
+            /*addStyles();*/
             console.error = console.log = function (message) {
                 if (!element) {
                     createConsoleBlock();
