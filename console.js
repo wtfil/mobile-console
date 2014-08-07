@@ -66,7 +66,7 @@
             }
         } else {
 
-            node.innerHTML = obj.constructor.name;
+            node.innerHTML = obj.constructor.name || obj.constructor.toString().replace(/\[|\]|object\s/g, '');
             content.classList.add('inspect');
             if (Array.isArray(obj)) {
                 node.innerHTML = '[' + obj.length + ']';
