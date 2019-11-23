@@ -15,5 +15,5 @@ How to use it
 ---------------
 
 ```html
-<script type="text/javascript" src="https://rawgit.com/wtfil/mobile-console/master/console.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/wtfil/mobile-console@master/console.js"></script>
 ```
